@@ -1,41 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Button, Header, Icon } from 'react-native-elements';
-
-
+import axios from 'axios';
 
 function CadastroScreen({ navigation,}) {
   
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
+  const [getNome, setNome] = useState('');
+  const [getEmail, setEmail] = useState('');
   
-  function cadastrar() {
-    
-    async function inserirDados(){
-        
-      axios.post('http://professornilson.com/testeservico/clientes', {
+  async function cadastrar() {
+            
+      await axios.post('http://professornilson.com/testeservico/clientes', {
           nome: getNome,
           telefone: getEmail,
         })
         .then(function (response) {
-          setNome('');
-          setEmail('');
-           
+          alert("Contato Cadastro com sucesso!")
+          navigation.navigate('Lista');
           console.log(response);
         })
         .catch(function (error) {
           console.log(error);
         });     
-      
+          
   }
   
-      navigation.navigate('Lista');
-    
-  }
-  
-
-
-
   return (
     <View >
       <Header
@@ -57,7 +46,7 @@ function CadastroScreen({ navigation,}) {
       <TextInput
         style={styles2.input}
         placeholder="Nome"
-        value={nome}
+        value={getNome}
         onChangeText={setNome}
       />
     
@@ -65,7 +54,7 @@ function CadastroScreen({ navigation,}) {
         style={styles2.input}
         placeholder="Email"
         keyboardType="email-address"
-        value={email}
+        value={getEmail}
         onChangeText={setEmail}
       />
     

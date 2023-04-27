@@ -6,12 +6,12 @@ import { Alert } from 'react-native';
 
 
 
-const AlteracaoCadastroScreen = ({navigation, route}) => {
+const AlteracaoCadastroScreen = ({ navigation, route }) => {
   const [getNome, setNome] = useState('');
   const [getEmail, setEmail] = useState('');
-  const [getTelefone, setTelefone] = useState(''); 
+  const [getTelefone, setTelefone] = useState('');
   const [getCpf, setCpf] = useState('');
-  const [getId, setId] = useState(''); [
+  const [getId, setId] = useState('');[
   ]
 
   const handleSignup = () => {
@@ -21,82 +21,53 @@ const AlteracaoCadastroScreen = ({navigation, route}) => {
     console.log('Cpf:', cpf);
     console.log('Id:', id);
   };
-  useEffect(()=>{
-    if(route.params){
-        const { nome } =  route.params 
-        const { email } =  route.params 
-        const { telefone } =  route.params 
-        const { cpf} =  route.params
-        const { id} =  route.params
+  useEffect(() => {
+    if (route.params) {
+      const { nome } = route.params
+      const { email } = route.params
+      const { telefone } = route.params
+      const { cpf } = route.params
+      const { id } = route.params
 
-        setNome(nome)
-        setEmail(email)
-        setTelefone(telefone)
-        setCpf(cpf)
-        setId(id)
-        
+      setNome(nome)
+      setEmail(email)
+      setTelefone(telefone)
+      setCpf(cpf)
+      setId(id)
+
     }
 
-},[]) 
+  }, [])
 
-function alterarDados(){
-  axios.put('http://professornilson.com/testeservico/clientes/'+getId, {
+  function alterarDados() {
+    axios.put('http://professornilson.com/testeservico/clientes/' + getId, {
       nome: getNome,
       telefone: getTelefone,
       email: getEmail,
       cpf: getCpf,
-      
+
     })
-    .then(function (response) {
-      setNome('');
-      setCpf('');
-      setEmail('');
-      setTelefone(''); 
-      
-      console.log(response);
+      .then(function (response) {
+        alert("Contato Alterado com sucesso!");
+        console.log(response);
+        navigation.navigate('Lista');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function excluirDados() {
+    axios.delete('http://professornilson.com/testeservico/clientes/' + getId
+    ).then(function (response) {
+      alert("Contato Removido com sucesso!");
       navigation.navigate('Lista');
-    })
-    .catch(function (error) {
+      console.log(response);
+    }).catch(function (error) {
+      alert("Falha na Exclusão!")
       console.log(error);
-    });    
-}
-
-function excluirDados(){
-
-    
-  Alert.alert(
-      "Atenção",
-      "Deseja excluir o registro?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => (
-          axios.delete('http://professornilson.com/testeservico/clientes/'+getId)
-          .then(function (response) {
-            setNome('');
-            setCpf('');
-            setEmail('');
-            setTelefone(''); 
-            showMessage({
-              message: "Registro Excluido com sucesso",
-              type: "danger",
-            });
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          }) 
-        ) }
-      ],
-      { cancelable: false }
-    );
-
-
-  
-}
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -105,29 +76,29 @@ function excluirDados(){
       </Text>
       <Input
         placeholder="Nome"
-        onChangeText= {setNome}
+        onChangeText={setNome}
         value={getNome}
         autoCapitalize="words"
       />
       <Input
         placeholder="Email"
-        onChangeText= {setEmail}
+        onChangeText={setEmail}
         value={getEmail}
         keyboardType="email-address"
         autoCapitalize="none"
       />
       <Input
         placeholder="Telefone"
-        onChangeText=  {setTelefone}
+        onChangeText={setTelefone}
         value={getTelefone}
-        />
+      />
       <Input
         placeholder="Cpf"
-        onChangeText= {setCpf}
+        onChangeText={setCpf}
         value={getCpf}
-       />
+      />
       <View style={styles.buttonContainer}>
-      
+
         <Button
           title="Alterar"
           buttonStyle={styles.button}
@@ -137,7 +108,7 @@ function excluirDados(){
           title="Excluir"
           buttonStyle={styles.button}
           onPress={excluirDados}
-          />
+        />
       </View>
     </View>
   );
